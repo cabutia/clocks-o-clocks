@@ -21,7 +21,8 @@ const initGlobalVariables = () => {
     const COR_TR = randBetween(['0930', '0645'])
     const COR_BL = randBetween(['0015', '0300'])
     const COR_BR = randBetween(['0900', '0045'])
-    const NULL_V = randBetween(['0000', '1200'])
+    const NULL_V = 'nothing'
+    window.CURRENT_TIME = NULL_V
 
     // [0] --> 48
     // [1] --> 49
@@ -194,17 +195,31 @@ const updateGrid = () => {
     const offsetX = 1
     const offsetY = 1
     let charsPrinted = 0
+    let remaining = []
     for (var i = 0; i < valuesArray.length; i++) {
         const charCode = valuesArray[i].charCodeAt(0)
         let character = window.characters['char_' + charCode]
         for (var y = 0; y < character.length; y++) {
+            let cY = offsetY + y
+            remaining[cY] = []
             for (var x = 0; x < character[y].length; x++) {
                 let cX = (charsPrinted * 4) + x + offsetX
-                let cY = offsetY + y
+                remaining[cY + '_' + cX] = 'used'
                 window.grid[cY][cX] = character[y][x].toString()
             }
         }
         charsPrinted++
+    }
+
+    for (var y = 0; y < window.grid.length; y++) {
+        for (var x = 0; x < window.grid[y].length; x++) {
+            if (!remaining[y + '_' + x] || window.grid[y][x] == window.CURRENT_TIME) {
+                let d = new Date()
+                let h = d.getHours().toString().padStart(2, '0')
+                let m = d.getMinutes().toString().padStart(2, '0')
+                window.grid[y][x] = h + m
+            }
+        }
     }
 }
 
@@ -221,13 +236,22 @@ const initTimeInterval = () => {
     }, 1000)
 }
 
+const initRandomTime = () => {
+    for (var y = 0; y < window.grid.length; y++) {
+        for (var x = 0; x < window.grid[y].length; x++) {
+            let randomHours = Math.floor(Math.random() * 12)
+            let randomMinutes = Math.floor(Math.random() * 60)
+            window.grid[y][x] = randomHours.toString() + randomMinutes.toString()
+        }
+    }
+}
+
 const init = ev => {
     initGlobalVariables()
     initGrid()
+    initRandomTime()
     printGrid()
-    // initContainer()
     initTimeInterval()
-    // updateGrid()
 }
 
 document.addEventListener('DOMContentLoaded', init)
