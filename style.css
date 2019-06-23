@@ -1,20 +1,37 @@
+body {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.main-container {
+    display: block;
+}
+
 .clock {
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    /* border: 1px solid #eee; */
-    box-shadow: 0px 2px 6px rgba(0,0,0,.1);
+    border: 1px solid #ccc;
+    /* box-shadow: 0px 2px 6px rgba(0,0,0,.1); */
     position: relative;
-    margin: 10px;
+    margin: 4px;
+    float: left;
+    display: block;
 }
 
 .needle-hours,
 .needle-minutes {
-    height: 10px;
     width: 2px;
+    height: 9px;
     position: absolute;
     bottom: 50%;
     left: 50%;
     background: #444;
     transform-origin: bottom;
+    transition: all .5s ease;
 }
